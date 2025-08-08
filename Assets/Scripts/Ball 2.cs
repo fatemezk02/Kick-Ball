@@ -8,13 +8,11 @@ public class BallController3D : MonoBehaviour
 
     void Start()
     {
-        // دریافت کامپوننت Rigidbody
         rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        // بررسی کلیک چپ ماوس
         if (Input.GetMouseButtonDown(0))
         {
             // ایجاد یک Ray از دوربین به موقعیت ماوس

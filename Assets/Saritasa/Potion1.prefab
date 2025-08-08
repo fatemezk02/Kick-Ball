@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6706690170851938935}
   - component: {fileID: 7832779666658267697}
   - component: {fileID: 8572125378059278764}
-  - component: {fileID: 5666059017152212042}
+  - component: {fileID: 3918598261304367732}
   m_Layer: 0
   m_Name: Potion1
   m_TagString: Untagged
@@ -107,7 +107,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5666059017152212042
+--- !u!114 &3918598261304367732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,6 +116,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6139620576459918275}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9f78f205d2c16444af00fddf5bde9d3, type: 3}
+  m_Script: {fileID: 11500000, guid: b359f32d3ab0862418505201b849c1f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

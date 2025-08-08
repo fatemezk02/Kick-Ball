@@ -11,8 +11,16 @@ public class ThrowBall : MonoBehaviour
     public int Score = 0;
     private Game_Manager GM;
     public bool energy1 = false;
+    public bool energy2 = false;
     private int i = 0;
+    private int j = 0;
     private UI_Manager UI;
+    private int n = 2;
+    private int h = 0;
+    [Header("mainSpeeds")]
+    private float e;
+    private float t;
+    private float v;
     void Start()
     {
         GM = GameObject.Find("Game_Manager").GetComponent<Game_Manager>();
@@ -22,6 +30,7 @@ public class ThrowBall : MonoBehaviour
         rb.drag = 1f;
         rb.angularDrag = 0f;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        rb.isKinematic = true;
 
         if (mainCamera == null)
         {
@@ -31,14 +40,18 @@ public class ThrowBall : MonoBehaviour
 
     void FixedUpdate()
     {
-        //rb.AddForce(Vector3.down * extraGravityForce, ForceMode.Acceleration);
+        rb.AddForce(Vector3.down * extraGravityForce, ForceMode.Acceleration);
     }
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-
+            h++;
+            if (h == 1 && GM.GameOver == false)
+            {
+                rb.isKinematic = false;
+            }
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
@@ -46,7 +59,7 @@ public class ThrowBall : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
 
-                if (hit.transform == transform && GM.GameOver == false)
+                if (hit.transform == transform && GM.GameOver == false && Time.timeScale == 1f)
                 {
                     if (energy1 == true)
                     {
@@ -56,10 +69,20 @@ public class ThrowBall : MonoBehaviour
                         {
                             StartCoroutine(cancelEnergy());
                         }
+                        if (Score >= n)
+                        {
+                            UI.nextLevel(n);
+                            n = 3;
+                        }
                     }
                     else if (energy1 == false)
                     {
                         Score++;
+                        if (Score == n)
+                        {
+                            UI.nextLevel(n);
+                            n = 3;
+                        }
                     }
 
                     Vector3 hitPoint = hit.point;
@@ -75,7 +98,7 @@ public class ThrowBall : MonoBehaviour
                     if (forceDirection.magnitude > 0)
                     {
                         currentVelocity.x = forceDirection.x * throwForce;
-                        currentVelocity.z = forceDirection.z * throwForce;
+                        currentVelocity.z = 0f;
                     }
                     else
                     {
@@ -87,6 +110,7 @@ public class ThrowBall : MonoBehaviour
                 }
             }
         }
+        GM.SetScore(Score);
     }
 
     private void OnCollisionEnter(Collision other)
@@ -104,4 +128,29 @@ public class ThrowBall : MonoBehaviour
         energy1 = false;
         GM.callWait();
     }
+    IEnumerator cancelEnergy2()
+    {
+        yield return new WaitForSeconds(6f);
+        j = 0;
+        energy2 = false;
+        GM.callWait2();
+    }
+    public void Energy2()
+    {
+        if (energy2 == true)
+        {
+            extraGravityForce = 3.3f;
+            throwForce = 5f;
+            verticalSpeed = 5f;
+        }
+        StartCoroutine(BackFromE2());
+    }
+    IEnumerator BackFromE2()
+    {
+        yield return new WaitForSeconds(5f);
+        e = extraGravityForce;
+        t = throwForce;
+        v = verticalSpeed;
+    }
+
 }

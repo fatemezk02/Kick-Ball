@@ -6,10 +6,11 @@ public class Potion2 : MonoBehaviour
 {
     private ThrowBall Soccer;
     private Game_Manager GM;
+    private UI_Manager UI;
     private void Start()
     {
+        UI = GameObject.Find("UI_Manager").GetComponent<UI_Manager>();
         GM = GameObject.Find("Game_Manager").GetComponent<Game_Manager>();
-        Soccer = GameObject.Find("Soccer").GetComponent<ThrowBall>();
         StartCoroutine(destroy());
     }
     IEnumerator destroy()
@@ -23,7 +24,7 @@ public class Potion2 : MonoBehaviour
         if (other.tag == "Ball")
         {
             Destroy(this.gameObject,0.3f);
-            Soccer.energy1 = true;
+            other.gameObject.GetComponent<ThrowBall>().energy1 = true;
         }
     }
 }

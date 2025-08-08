@@ -13,6 +13,9 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private Button[] init_Btn;
     [SerializeField] private Button purch_Btn;
     [SerializeField] private Button consum_Btn;
+
+    [SerializeField] private Button[] kick_btn;
+    [SerializeField] private Button[] select_btn;
     
     [Header("Status")]
     [SerializeField] private TextMeshProUGUI statusTxt;
@@ -33,18 +36,27 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private GameObject shop_btn;
     [SerializeField] private GameObject shop_page;
     [SerializeField] private Button close_shop_btn;
+    [SerializeField] private GameObject BG;
+    [SerializeField] private GameObject BG1;
+    [SerializeField] private GameObject BG2;
 
     [Header("ScoreThings")]
     [SerializeField] private TMP_Text BScore;
     [SerializeField] private TMP_Text Score;
     private int bscore;
     private int score;
+    [SerializeField] private GameObject Score_Title;
 
-
+    [Header("Balls")]
+    [SerializeField] private GameObject[] Ball;
+    private int wich_Ball;
 
     // Start is called before the first frame update
     void Start()
     {
+        wich_Ball = PlayerPrefs.GetInt("wich_Ball", 2);
+        Ball[wich_Ball].SetActive(true);
+
         init_Btn[0].onClick.AddListener(IdPr0);
         init_Btn[1].onClick.AddListener(IdPr1);
         init_Btn[2].onClick.AddListener(IdPr2);
@@ -59,9 +71,14 @@ public class UI_Manager : MonoBehaviour
         close_shop_btn.onClick.AddListener(closeShop);
 
         bscore = PlayerPrefs.GetInt("BestScore", 0);
-        Debug.Log(bscore);
 
         activePuBtns(false);
+
+        select_btn[0].onClick.AddListener(() => selectBall(0));
+        select_btn[1].onClick.AddListener(() => selectBall(1));
+        select_btn[2].onClick.AddListener(() => selectBall(2));
+        select_btn[3].onClick.AddListener(() => selectBall(3));
+        select_btn[4].onClick.AddListener(() => selectBall(4));
     }
     private void IdPr0()
     {
@@ -100,6 +117,7 @@ public class UI_Manager : MonoBehaviour
         _IsInitialized = true;
         //activePuBtns(true);
         OnPurchClick();
+
     }
 
     private async void OnPurchClick()
@@ -114,6 +132,10 @@ public class UI_Manager : MonoBehaviour
         }
         SetStatusTxt("purchase succeed", "green");
         purch_Btn.interactable = false;
+        
+        init_Btn[num].gameObject.SetActive(false);
+        kick_btn[num].gameObject.SetActive(false);
+        select_btn[num].gameObject.SetActive(true);
     }
     private void activePuBtns(bool active)
     {
@@ -169,5 +191,34 @@ public class UI_Manager : MonoBehaviour
     {
         LoseBox.SetActive(true);
         shop_page.SetActive(false);
+    }
+    public void nextLevel(int R)
+    {
+        if (R == 2)
+        {
+            BG.SetActive(false);
+            BG1.SetActive(true);
+            Debug.Log(Score_Title.transform.position);
+            Score_Title.transform.position = new Vector3(525f, 1770f, 0f);
+        }
+        else if (R == 3)
+        {
+            BG1.SetActive(false);
+            BG2.SetActive(true);
+            Score_Title.transform.position = new Vector3(525f, 1634.6f, 0f);
+        }
+    }
+    private void selectBall(int a)
+    {
+        Ball[0].SetActive(false);
+        Ball[1].SetActive(false);
+        Ball[2].SetActive(false);
+        Ball[3].SetActive(false);
+        Ball[4].SetActive(false);
+        if (! Ball[a].activeInHierarchy)
+        {
+            Ball[a].SetActive(true);
+        }
+        PlayerPrefs.SetInt("wich_Ball", 1);
     }
 }

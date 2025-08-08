@@ -18,23 +18,41 @@ public class Game_Manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Soccer = GameObject.Find("Soccer").GetComponent<ThrowBall>();
         StartCoroutine(WaitPotion());
+        StartCoroutine(WaitePotion2());
+        Debug.Log("start GM");
+        //Soccer = GameObject.Find("Soccer").GetComponent<ThrowBall>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Snum.text = Soccer.Score.ToString();
+        
     }
     public void callWait()
     {
         StartCoroutine(WaitPotion());
     }
+    public void callWait2()
+    {
+        StartCoroutine(WaitePotion2());
+    }
     IEnumerator WaitPotion()
     {
+        Debug.Log("po2");
         float wait = Random.Range(minWaite, maxWaite);
         yield return new WaitForSeconds(wait);
-        Instantiate(potion[Random.Range(1, 2)], new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(2.5f, 5.5f), 0f), Quaternion.identity);
+        Instantiate(potion[1], new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(2.5f, 5.5f), 0f), Quaternion.identity);
+    }
+    IEnumerator WaitePotion2()
+    {
+        Debug.Log("po1");
+        float waite = Random.Range(4f, 9f);
+        yield return new WaitForSeconds(waite);
+        Instantiate(potion[0], new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(2.5f, 5.5f), 0f), Quaternion.identity);
+    }
+    public void SetScore(int S)
+    {
+        Snum.text = S.ToString();
     }
 }
