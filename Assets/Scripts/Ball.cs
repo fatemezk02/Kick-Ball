@@ -15,12 +15,13 @@ public class ThrowBall : MonoBehaviour
     private int i = 0;
     private int j = 0;
     private UI_Manager UI;
-    private int n = 2;
-    private int h = 0;
+    private int n = 20;
+    private int h = 1;
     [Header("mainSpeeds")]
     private float e;
     private float t;
     private float v;
+    public bool infinit = false;
     void Start()
     {
         GM = GameObject.Find("Game_Manager").GetComponent<Game_Manager>();
@@ -47,11 +48,8 @@ public class ThrowBall : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            h++;
-            if (h == 1 && GM.GameOver == false)
-            {
-                rb.isKinematic = false;
-            }
+            
+            
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
@@ -61,6 +59,11 @@ public class ThrowBall : MonoBehaviour
 
                 if (hit.transform == transform && GM.GameOver == false && Time.timeScale == 1f)
                 {
+                    if (h == 1 && GM.GameOver == false)
+                    {
+                        h++;
+                        rb.isKinematic = false;
+                    }
                     if (energy1 == true)
                     {
                         Score += 2;
@@ -72,7 +75,7 @@ public class ThrowBall : MonoBehaviour
                         if (Score >= n)
                         {
                             UI.nextLevel(n);
-                            n = 3;
+                            n = 50;
                         }
                     }
                     else if (energy1 == false)
@@ -81,7 +84,7 @@ public class ThrowBall : MonoBehaviour
                         if (Score == n)
                         {
                             UI.nextLevel(n);
-                            n = 3;
+                            n = 50;
                         }
                     }
 
@@ -115,7 +118,7 @@ public class ThrowBall : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.collider.tag == "Ground")
+        if (other.collider.tag == "Ground" && energy1 == false && infinit == false)
         {
             GM.GameOver = true;
             UI.LosePage(Score);
@@ -130,13 +133,16 @@ public class ThrowBall : MonoBehaviour
     }
     IEnumerator cancelEnergy2()
     {
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(5f);
         j = 0;
         energy2 = false;
         GM.callWait2();
     }
     public void Energy2()
     {
+        e = extraGravityForce;
+        t = throwForce;
+        v = verticalSpeed;
         if (energy2 == true)
         {
             extraGravityForce = 3.3f;
@@ -148,9 +154,10 @@ public class ThrowBall : MonoBehaviour
     IEnumerator BackFromE2()
     {
         yield return new WaitForSeconds(5f);
-        e = extraGravityForce;
-        t = throwForce;
-        v = verticalSpeed;
+        energy2 = false;
+        extraGravityForce = e;
+        throwForce = t;
+        verticalSpeed = v;
     }
 
 }

@@ -12,15 +12,16 @@ public class Game_Manager : MonoBehaviour
     [SerializeField]
     private float maxWaite = 9f;
     [SerializeField]
-    private float minWaite = 5f;
+    private float minWaite = 7f;
     [SerializeField]
     private GameObject[] potion;
+    private ThrowBall TheBall;
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(WaitPotion());
         StartCoroutine(WaitePotion2());
-        Debug.Log("start GM");
+        StartCoroutine(FindTheBll());
         //Soccer = GameObject.Find("Soccer").GetComponent<ThrowBall>();
     }
 
@@ -42,17 +43,37 @@ public class Game_Manager : MonoBehaviour
         Debug.Log("po2");
         float wait = Random.Range(minWaite, maxWaite);
         yield return new WaitForSeconds(wait);
-        Instantiate(potion[1], new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(2.5f, 5.5f), 0f), Quaternion.identity);
+        if (TheBall.energy2 == false && GameOver == false)
+        {
+            Instantiate(potion[1], new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(2.5f, 5.5f), 0f), Quaternion.identity);
+        }
+        else if (TheBall.energy2 == true && GameOver == false)
+        {
+            callWait();
+        }
+        
     }
     IEnumerator WaitePotion2()
     {
         Debug.Log("po1");
-        float waite = Random.Range(4f, 9f);
+        float waite = Random.Range(5f, 7.5f);
         yield return new WaitForSeconds(waite);
-        Instantiate(potion[0], new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(2.5f, 5.5f), 0f), Quaternion.identity);
+        if (TheBall.energy1 == false && GameOver == false)
+        {
+            Instantiate(potion[0], new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(2.5f, 5.5f), 0f), Quaternion.identity);
+        }
+        else if (TheBall.energy1 == true && GameOver == false)
+        {
+            callWait2();
+        }
     }
     public void SetScore(int S)
     {
         Snum.text = S.ToString();
+    }
+    IEnumerator FindTheBll()
+    {
+        yield return new WaitForSeconds(0.2f);
+        TheBall = GameObject.FindGameObjectWithTag("Ball").GetComponent<ThrowBall>();
     }
 }
