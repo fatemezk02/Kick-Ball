@@ -435,4 +435,8 @@ public class UI_Manager : MonoBehaviour
         PlayerPrefs.SetInt($"B{num}", 0);
         PlayerPrefs.Save();
     }
+    public void exitgame()
+    {
+        Application.Quit();
+    }
 }
